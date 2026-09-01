@@ -135,9 +135,27 @@ export function Hero() {
           </p>
           <Countdown />
         </div>
+
+        {/* mobile: date/venue sit in normal flow so they can't collide with
+            the countdown or CTAs on short screens */}
+        <div className="mt-10 flex flex-col items-center gap-4 sm:hidden">
+          <div className="flex items-center gap-2.5">
+            <CalendarDays className="h-5 w-5 shrink-0 text-primary" />
+            <p className="text-sm font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              3 October, 2026
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <MapPin className="h-5 w-5 shrink-0 text-primary" />
+            <p className="text-sm font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              Gurukul Building, IEM, Saltlake
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="absolute right-5 bottom-28 z-10 space-y-3 text-right sm:right-10 sm:bottom-32">
+      {/* desktop/tablet: pinned to the corner, out of the way of the centered content */}
+      <div className="absolute right-5 bottom-28 z-10 hidden space-y-3 text-right sm:right-10 sm:bottom-32 sm:block">
         <div className="flex items-center justify-end gap-3">
           <div>
             <p className="text-xs tracking-[0.25em] text-muted-foreground uppercase">Date</p>

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import {
   DoorOpen,
   Sparkles,
@@ -221,8 +221,12 @@ export function Schedule() {
                     ref={(el) => {
                       dotRefs.current[i] = el;
                     }}
-                    className="absolute top-3 left-3 z-10 grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full border-2 border-primary bg-background shadow-[var(--shadow-rune)] transition-transform duration-300 group-hover:scale-110 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0"
-                    style={{ left: `calc(50% - ${GUTTER_WIDTH / 2}px + ${isLeft ? LANE_LEFT : LANE_RIGHT}px)` }}
+                    className="absolute top-3 left-3 z-10 grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full border-2 border-primary bg-background shadow-[var(--shadow-rune)] transition-transform duration-300 group-hover:scale-110 sm:top-1/2 sm:left-[var(--dot-left)] sm:-translate-y-1/2 sm:translate-x-0"
+                    style={
+                      {
+                        "--dot-left": `calc(50% - ${GUTTER_WIDTH / 2}px + ${isLeft ? LANE_LEFT : LANE_RIGHT}px)`,
+                      } as CSSProperties
+                    }
                   >
                     <Icon className="h-4 w-4 text-primary" />
                     <span className="pointer-events-none absolute inset-0 -z-10 animate-glow rounded-full bg-primary/25 blur-sm" />

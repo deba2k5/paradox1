@@ -66,6 +66,44 @@ export function RuneRing({ className = "" }: { className?: string }) {
   );
 }
 
+/** A hand-sprayed underline in place of a ruled line — a rough wavy stroke with a
+ *  paint drip hanging off it, like a can dragged once under a freshly tagged word. */
+function SprayUnderline({ align }: { align: "center" | "left" }) {
+  return (
+    <div className={`mt-4 ${align === "center" ? "flex justify-center" : ""}`}>
+      <svg
+        viewBox="0 0 220 34"
+        className="spray-stroke h-7 w-40 text-primary sm:w-56"
+        aria-hidden="true"
+      >
+        <path
+          d="M4 14 Q 34 4, 62 13 T 120 11 T 178 15 T 216 9"
+          stroke="currentColor"
+          strokeWidth="5"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.85"
+        />
+        <path
+          d="M4 21 Q 40 27, 90 20 T 216 18"
+          stroke="var(--accent)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.6"
+        />
+        <path
+          className="animate-drip"
+          style={{ transformOrigin: "104px 16px", animationDelay: "0.4s" }}
+          d="M102 16c0 8 0 14 2 18 3-3 3-11 2-18Z"
+          fill="var(--primary)"
+          opacity="0.8"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function SectionTitle({
   eyebrow,
   title,
@@ -78,16 +116,17 @@ export function SectionTitle({
   return (
     <div className={align === "center" ? "text-center" : "text-left"}>
       {eyebrow ? (
-        <p className="text-xs tracking-[0.45em] text-primary uppercase">{eyebrow}</p>
+        <p
+          className="font-tag inline-block -rotate-2 text-xs tracking-[0.3em] text-accent uppercase"
+          style={{ textShadow: "2px 2px 0 color-mix(in oklab, var(--primary) 70%, black)" }}
+        >
+          {eyebrow}
+        </p>
       ) : null}
-      <h2 className="mt-3 text-3xl font-semibold tracking-wide text-glow sm:text-5xl">{title}</h2>
-      <div
-        className={`mt-5 flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}
-      >
-        <span className="h-px w-16 bg-gradient-to-r from-transparent to-primary sm:w-28" />
-        <span className="h-2 w-2 rotate-45 bg-primary shadow-[var(--shadow-rune)]" />
-        <span className="h-px w-16 bg-gradient-to-l from-transparent to-primary sm:w-28" />
-      </div>
+      <h2 className="font-graffiti stencil-text mt-3 text-4xl leading-tight font-normal sm:text-6xl">
+        {title}
+      </h2>
+      <SprayUnderline align={align} />
     </div>
   );
 }

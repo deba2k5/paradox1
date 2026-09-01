@@ -11,6 +11,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ClientOnly } from "../components/three/ClientOnly";
+import { MultiverseBackground } from "../components/three/MultiverseBackground";
+import { EnergyCursor } from "../components/paradox/EnergyCursor";
+import { PortalIntro } from "../components/paradox/PortalIntro";
+import { useLowPowerDevice } from "../hooks/use-device-tier";
 
 function NotFoundComponent() {
   return (
@@ -91,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Permanent+Marker&family=Rubik+Wet+Paint&display=swap",
       },
       {
         rel: "stylesheet",
@@ -122,9 +127,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const lowPower = useLowPowerDevice();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ClientOnly>
+        <MultiverseBackground lowPower={lowPower} />
+        <EnergyCursor />
+        <PortalIntro />
+      </ClientOnly>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>

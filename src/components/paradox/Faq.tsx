@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -5,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SectionTitle } from "./RuneRing";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const faqs = [
   {
@@ -34,17 +36,22 @@ const faqs = [
 ];
 
 export function Faq() {
+  const sectionRef = useRef<HTMLElement>(null);
+  useScrollReveal(sectionRef);
+
   return (
-    <section id="faq" className="relative py-24 sm:py-32">
+    <section id="faq" ref={sectionRef} className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-3xl px-5">
-        <SectionTitle eyebrow="Answers from the ancient one" title="FAQ" />
+        <div className="reveal reveal-target">
+          <SectionTitle eyebrow="Answers from the ancient one" title="FAQ" />
+        </div>
 
         <Accordion type="single" collapsible className="mt-14 space-y-4">
           {faqs.map(({ q, a }, i) => (
             <AccordionItem
               key={q}
               value={`item-${i}`}
-              className="rune-panel rounded-lg border-b-0 px-5"
+              className="rune-panel reveal reveal-target rounded-lg border-b-0 px-5"
             >
               <AccordionTrigger className="text-left font-display text-base font-semibold tracking-wide hover:text-primary hover:no-underline">
                 {q}

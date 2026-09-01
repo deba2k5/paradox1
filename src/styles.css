@@ -48,6 +48,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-display: "Cinzel", serif;
   --font-sans: "Rajdhani", system-ui, sans-serif;
+  --font-graffiti: "Rubik Wet Paint", "Cinzel", cursive;
+  --font-tag: "Permanent Marker", cursive;
 }
 
 :root {
@@ -80,6 +82,9 @@
   --sidebar-accent-foreground: oklch(0.95 0.008 40);
   --sidebar-border: oklch(0.32 0.08 25 / 45%);
   --sidebar-ring: oklch(0.55 0.21 25);
+
+  --portal-blue: oklch(0.58 0.19 255);
+  --portal-void: oklch(0.08 0.015 20);
 
   --gradient-mystic: linear-gradient(135deg, oklch(0.55 0.21 25), oklch(0.68 0.22 28));
   --gradient-void: linear-gradient(
@@ -159,6 +164,98 @@
   color: transparent;
 }
 
+/* Flame-lit heading text — sits inside the video's fire ring, so it reads as if
+   lit by it: bright core fading through ember-orange to deep red at the edges. */
+@utility flame-text {
+  background: linear-gradient(
+    180deg,
+    oklch(0.97 0.03 90) 0%,
+    oklch(0.85 0.16 70) 35%,
+    oklch(0.68 0.2 40) 65%,
+    var(--primary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--accent) 55%, transparent))
+    drop-shadow(0 0 60px color-mix(in oklab, var(--primary) 45%, transparent));
+}
+
+/* ---------------------------------------------------------------------- */
+/* Graffiti / street-art layer                                            */
+/* ---------------------------------------------------------------------- */
+
+@utility font-graffiti {
+  font-family: var(--font-graffiti);
+}
+
+@utility font-tag {
+  font-family: var(--font-tag);
+}
+
+/* Bold outlined "stencil" text — a thick dark keyline plus a soft color bleed,
+   like paint sprayed through a cut stencil. */
+@utility stencil-text {
+  color: var(--foreground);
+  -webkit-text-stroke: 2px color-mix(in oklab, var(--background) 85%, black);
+  paint-order: stroke fill;
+  text-shadow:
+    3px 3px 0 color-mix(in oklab, var(--primary) 80%, black),
+    -1px -1px 0 color-mix(in oklab, var(--accent) 60%, transparent),
+    0 0 30px color-mix(in oklab, var(--primary) 50%, transparent);
+}
+
+/* A hand-sprayed underline stroke instead of a ruled line — see SectionTitle. */
+@utility spray-stroke {
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--primary) 60%, transparent));
+}
+
+@keyframes drip {
+  0% {
+    transform: scaleY(0.3);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0.85;
+  }
+}
+
+@utility animate-drip {
+  animation: drip 1.8s cubic-bezier(0.3, 0.8, 0.4, 1) both;
+}
+
+/* Rough torn/stencil-cut card edge instead of a clean rounded rectangle. */
+@utility graffiti-panel {
+  clip-path: polygon(
+    0% 3%,
+    2% 0%,
+    97% 0%,
+    100% 4%,
+    100% 96%,
+    98% 100%,
+    3% 100%,
+    0% 97%
+  );
+}
+
+/* Spray-can CTA button: rough clipped corners, thick paint-drip border, slight tag tilt. */
+@utility graffiti-btn {
+  clip-path: polygon(1.5% 8%, 6% 0%, 94% 2%, 100% 12%, 98.5% 92%, 93% 100%, 5% 98%, 0% 88%);
+  transform: rotate(-1.2deg);
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.graffiti-btn:hover {
+  transform: rotate(0deg) scale(1.04);
+  filter: brightness(1.1);
+}
+
 @keyframes rune-spin {
   to {
     transform: rotate(360deg);
@@ -199,4 +296,178 @@
 
 @utility animate-float {
   animation: float-slow 7s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Schedule — mystic timeline                                             */
+/* ---------------------------------------------------------------------- */
+
+@keyframes spark-travel {
+  from {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  to {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@utility animate-spark-travel {
+  animation: spark-travel 5s linear infinite;
+}
+
+@keyframes day-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-day-fade {
+  animation: day-fade-in 0.5s ease both;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Energy cursor                                                          */
+/* ---------------------------------------------------------------------- */
+
+body.energy-cursor-active,
+body.energy-cursor-active * {
+  cursor: none !important;
+}
+
+.energy-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 999px;
+  background: oklch(0.78 0.13 82);
+  box-shadow:
+    0 0 10px 2px color-mix(in oklab, var(--primary) 70%, transparent),
+    0 0 22px 6px color-mix(in oklab, var(--primary-glow) 45%, transparent);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+.energy-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 55%, transparent);
+  pointer-events: none;
+  z-index: 9998;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    margin 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+  will-change: transform;
+}
+
+.energy-cursor-ring.energy-cursor-hover {
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-color: color-mix(in oklab, var(--accent) 70%, transparent);
+  background: color-mix(in oklab, var(--primary) 12%, transparent);
+  box-shadow: 0 0 30px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-cursor-dot,
+  .energy-cursor-ring {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Scroll reveal (driven by GSAP ScrollTrigger via .reveal-in class)      */
+/* ---------------------------------------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(36px) scale(0.98);
+  filter: blur(6px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3D tilt cards                                                          */
+/* ---------------------------------------------------------------------- */
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+.tilt-card-glow {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.tilt-card:hover .tilt-card-glow,
+.tilt-card:focus-within .tilt-card-glow {
+  opacity: 1;
+}
+
+@keyframes spark-drift {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--spark-x, 20px), var(--spark-y, -30px)) scale(1);
+    opacity: 0;
+  }
+}
+
+.spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--spark-color, oklch(0.78 0.13 82));
+  box-shadow: 0 0 6px 1px var(--spark-color, oklch(0.78 0.13 82));
+  animation: spark-drift 1.4s ease-out infinite;
 }

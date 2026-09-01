@@ -104,7 +104,7 @@ export function Hero() {
         <p className="font-tag inline-block rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
           Code Beyond Reality
         </p>
-        <h1 className="font-graffiti flame-text mt-4 text-7xl leading-none font-normal sm:text-8xl lg:text-9xl">
+        <h1 className="font-graffiti flame-text mt-4 max-w-full text-[clamp(2.3rem,11vw,3.5rem)] leading-none font-normal break-words sm:text-8xl lg:text-9xl">
           PARADOX
         </h1>
         <p className="mt-4 text-sm tracking-[0.4em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base">

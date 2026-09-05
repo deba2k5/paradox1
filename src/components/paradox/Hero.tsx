@@ -104,12 +104,19 @@ export function Hero() {
         <p className="font-tag inline-block rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
           Code Beyond Reality
         </p>
+<<<<<<< HEAD
         <img
           src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
           alt="Hero Image"
           className="mt-4 max-w-full h-auto"
         />
         <p className="mt-4 text-sm tracking-[0.4em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base font-bold">
+=======
+        <h1 className="font-graffiti flame-text mt-4 max-w-full text-[clamp(2.3rem,11vw,3.5rem)] leading-none font-normal break-words sm:text-8xl lg:text-9xl">
+          PARADOX
+        </h1>
+        <p className="mt-4 text-sm tracking-[0.4em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base">
+>>>>>>> 487f4f581d11da53af78cddd960c740b810affc9
           8-Hour Hack Beyond Logic
         </p>
 
@@ -131,8 +138,13 @@ export function Hero() {
           </a>
         </div>
 
+<<<<<<< HEAD
         <div className="mt-12 sm:opacity-100 opacity-70">
           <p className="mb-4 text-xs tracking-[0.4em] text-foreground/90 uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:opacity-100">
+=======
+        <div className="mt-12">
+          <p className="mb-4 text-xs tracking-[0.4em] text-foreground/90 uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+>>>>>>> 487f4f581d11da53af78cddd960c740b810affc9
             The portal closes in
           </p>
           <Countdown />

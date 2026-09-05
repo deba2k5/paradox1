@@ -72,11 +72,17 @@ export function SiteNav() {
           }`}
         >
           <a href="#home" className="group flex items-center gap-3 sm:gap-4">
+<<<<<<< HEAD
             <img
               src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
               alt="Paradox Logo"
               className="h-12 w-auto"
             />
+=======
+            <span className="font-graffiti flame-text -rotate-1 text-2xl leading-none font-normal transition-transform group-hover:rotate-0 sm:text-3xl">
+              PARADOX
+            </span>
+>>>>>>> 487f4f581d11da53af78cddd960c740b810affc9
 
             <span className="hidden h-8 w-px bg-white/15 lg:block" aria-hidden="true" />
 

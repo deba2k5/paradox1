@@ -92,9 +92,15 @@ const journey = [
 ];
 
 const prizes = [
+<<<<<<< HEAD
   { place: "Winner", prize: "₹15,000", note: "The Sorcerer Supreme", big: true, image: cardRules },
   { place: "1st Runner Up", prize: "₹10,000", note: "Master of the Mystic Arts", image: prize1st },
   { place: "2nd Runner Up", prize: "₹5,000", note: "Keeper of the Time Stone", image: prize2nd },
+=======
+  { place: "Winner", prize: "₹50,000", note: "The Sorcerer Supreme", big: true, image: cardRules },
+  { place: "1st Runner Up", prize: "₹30,000", note: "Master of the Mystic Arts", image: prize1st },
+  { place: "2nd Runner Up", prize: "₹20,000", note: "Keeper of the Time Stone", image: prize2nd },
+>>>>>>> 487f4f581d11da53af78cddd960c740b810affc9
 ];
 
 export function Guide() {

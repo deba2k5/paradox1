@@ -1,40 +1,78 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { RuneRing } from "./RuneRing";
 import { Countdown } from "./Countdown";
 
-let scrollTriggerRegistered = false;
+const VIDEO_MOBILE = "/portal-loop.mp4";
+const VIDEO_DESKTOP = "/loop-desktop.mp4";
+/** duration of the crossfade in seconds */
+const CROSSFADE_DURATION = 1.2;
 
 export function Hero() {
   const flashRef = useRef<HTMLDivElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const [travelling, setTravelling] = useState(false);
 
+  const vidA = useRef<HTMLVideoElement>(null);
+  const vidB = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
-    if (!scrollTriggerRegistered) {
-      gsap.registerPlugin(ScrollTrigger);
-      scrollTriggerRegistered = true;
-    }
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || !videoWrapRef.current) return;
+    const a = vidA.current;
+    const b = vidB.current;
+    if (!a || !b) return;
 
-    const ctx = gsap.context(() => {
-      gsap.to(videoWrapRef.current, {
-        scale: 1.25,
-        opacity: 0.15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#home",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.6,
-        },
+    // B starts hidden; A starts visible
+    a.style.opacity = "1";
+    b.style.opacity = "0";
+
+    /** Crossfade from `outgoing` to `incoming`, then clean up. */
+    const crossfade = (outgoing: HTMLVideoElement, incoming: HTMLVideoElement) => {
+      // Prepare incoming from the very first frame
+      incoming.currentTime = 0;
+      incoming.play().catch(() => {});
+
+      // GPU-accelerated CSS opacity transition
+      incoming.style.transition = `opacity ${CROSSFADE_DURATION}s ease-in-out`;
+      outgoing.style.transition = `opacity ${CROSSFADE_DURATION}s ease-in-out`;
+
+      // Double rAF so the browser commits the transition before we flip opacity
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          incoming.style.opacity = "1";
+          outgoing.style.opacity = "0";
+        });
       });
-    });
 
-    return () => ctx.revert();
+      // After the fade is done, pause and reset the outgoing video
+      incoming.addEventListener(
+        "transitionend",
+        () => {
+          outgoing.pause();
+          outgoing.currentTime = 0;
+          outgoing.style.transition = "";
+          incoming.style.transition = "";
+        },
+        { once: true },
+      );
+    };
+
+    // When A finishes → crossfade into B
+    const onEndedA = () => crossfade(a, b);
+    // When B finishes → crossfade back into A
+    const onEndedB = () => crossfade(b, a);
+
+    a.addEventListener("ended", onEndedA);
+    b.addEventListener("ended", onEndedB);
+
+    // Kick off
+    a.currentTime = 0;
+    a.play().catch(() => {});
+
+    return () => {
+      a.removeEventListener("ended", onEndedA);
+      b.removeEventListener("ended", onEndedB);
+    };
   }, []);
 
   const enterMultiverse = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -72,19 +110,29 @@ export function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden pt-28">
-      <div ref={videoWrapRef} className="absolute inset-0">
+      {/* Dual-video wrapper: crossfade between vidA and vidB for seamless looping */}
+      <div ref={videoWrapRef} className="absolute inset-0 overflow-hidden">
         <video
-          autoPlay
+          ref={vidA}
           muted
-          loop
           playsInline
           preload="auto"
-          className="h-full w-full object-cover"
-          style={{ filter: "saturate(1.25) brightness(0.75) contrast(1.05)" }}
+          className="absolute inset-0 h-full w-full object-cover object-[center_100%] sm:object-center"
         >
-          <source src="/portal-loop.mp4" type="video/mp4" />
+          <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
+          <source src={VIDEO_MOBILE} type="video/mp4" />
         </video>
-        {/* Optional custom video can be placed on the About section instead. */}
+        <video
+          ref={vidB}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover object-[center_100%] sm:object-center"
+          style={{ opacity: 0 }}
+        >
+          <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
+          <source src={VIDEO_MOBILE} type="video/mp4" />
+        </video>
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,color-mix(in_oklab,var(--background)_55%,transparent)_0%,transparent_70%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,var(--background)_100%)]" />
@@ -100,20 +148,20 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col items-center justify-center px-5 pb-24 text-center">
-        <p className="font-tag inline-block rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
+      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col items-center justify-start sm:justify-center px-5 pb-24 text-center">
+        <p className="hidden sm:inline-block font-tag rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
           Code Beyond Reality
         </p>
         <img
           src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
           alt="Hero Image"
-          className="mt-4 max-w-full h-auto"
+          className="mt-[55vh] sm:mt-4 max-w-full h-auto"
         />
         <p className="mt-4 text-sm tracking-[0.4em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base font-bold">
           8-Hour Hack Beyond Logic
         </p>
 
-        <div className="mt-9 flex flex-wrap justify-center gap-5">
+        <div className="mt-[10rem] sm:mt-9 flex flex-wrap justify-center gap-5">
           <a
             href="#register"
             className="graffiti-btn group inline-flex items-center gap-3 border-2 border-white/80 bg-[image:var(--gradient-mystic)] px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-primary-foreground uppercase shadow-[var(--shadow-rune)]"
@@ -131,51 +179,6 @@ export function Hero() {
           </a>
         </div>
 
-        <div className="mt-12 sm:opacity-100 opacity-70">
-          <p className="mb-4 text-xs tracking-[0.4em] text-foreground/90 uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:opacity-100">
-            The portal closes in
-          </p>
-          <Countdown />
-        </div>
-
-        {/* mobile: date/venue sit in normal flow so they can't collide with
-            the countdown or CTAs on short screens */}
-        <div className="mt-10 flex flex-col items-center gap-4 sm:hidden">
-          <div className="flex items-center gap-2.5">
-            <CalendarDays className="h-5 w-5 shrink-0 text-primary" />
-            <p className="text-sm font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-              3 October, 2026
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <MapPin className="h-5 w-5 shrink-0 text-primary" />
-            <p className="text-sm font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-              Gurukul Building, IEM, Saltlake
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* desktop/tablet: pinned to the corner, out of the way of the centered content */}
-      <div className="absolute right-5 bottom-28 z-10 hidden space-y-3 text-right sm:right-10 sm:bottom-32 sm:block">
-        <div className="flex items-center justify-end gap-3">
-          <div>
-            <p className="text-xs tracking-[0.25em] text-muted-foreground uppercase">Date</p>
-            <p className="font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-              3 October, 2026
-            </p>
-          </div>
-          <CalendarDays className="h-6 w-6 shrink-0 text-primary" />
-        </div>
-        <div className="flex items-center justify-end gap-3">
-          <div>
-            <p className="text-xs tracking-[0.25em] text-muted-foreground uppercase">Venue</p>
-            <p className="font-semibold text-foreground drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-              Gurukul Building, IEM, Saltlake
-            </p>
-          </div>
-          <MapPin className="h-6 w-6 shrink-0 text-primary" />
-        </div>
       </div>
 
       <div className="relative border-t border-white/10">

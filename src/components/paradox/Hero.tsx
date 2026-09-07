@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { RuneRing } from "./RuneRing";
 import { Countdown } from "./Countdown";
 
-const VIDEO_MOBILE = "/portal-loop.mp4";
+const VIDEO_MOBILE = "/portal-loop-original.mp4";
 const VIDEO_DESKTOP = "/loop-desktop.mp4";
 /** duration of the crossfade in seconds */
 const CROSSFADE_DURATION = 1.2;
@@ -117,7 +117,7 @@ export function Hero() {
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-cover object-[center_100%] sm:object-center"
+          className="absolute inset-0 h-full w-full object-contain object-top sm:object-cover sm:object-center"
         >
           <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
           <source src={VIDEO_MOBILE} type="video/mp4" />
@@ -127,7 +127,7 @@ export function Hero() {
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-cover object-[center_100%] sm:object-center"
+          className="absolute inset-0 h-full w-full object-contain object-top sm:object-cover sm:object-center"
           style={{ opacity: 0 }}
         >
           <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
@@ -148,20 +148,26 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col items-center justify-start sm:justify-center px-5 pb-24 text-center">
+      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col items-center justify-center px-5 pb-24 text-center">
+        {/* Desktop-only tag */}
         <p className="hidden sm:inline-block font-tag rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
           Code Beyond Reality
         </p>
-        <img
-          src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
-          alt="Hero Image"
-          className="mt-[55vh] sm:mt-4 max-w-full h-auto"
-        />
-        <p className="mt-4 text-sm tracking-[0.4em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base font-bold">
-          8-Hour Hack Beyond Logic
-        </p>
 
-        <div className="mt-[10rem] sm:mt-9 flex flex-wrap justify-center gap-5">
+        {/* Logo + tagline: absolutely centered on the ring for mobile, normal flow on desktop */}
+        <div className="absolute top-[38%] left-1/2 w-[62vw] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center sm:relative sm:top-auto sm:left-auto sm:w-auto sm:translate-x-0 sm:translate-y-0 sm:mt-4">
+          <img
+            src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
+            alt="Hero Image"
+            className="w-full h-auto"
+          />
+          <p className="mt-2 text-[0.9rem] tracking-[0.25em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base sm:tracking-[0.4em] font-bold">
+            8-Hour Hack Beyond Logic
+          </p>
+        </div>
+
+        {/* Buttons: stacked vertically on mobile (positioned above bottom), row on desktop */}
+        <div className="absolute top-[68%] left-0 right-0 flex flex-col items-center gap-4 sm:relative sm:top-auto sm:left-auto sm:right-auto sm:mt-9 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-5">
           <a
             href="#register"
             className="graffiti-btn group inline-flex items-center gap-3 border-2 border-white/80 bg-[image:var(--gradient-mystic)] px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-primary-foreground uppercase shadow-[var(--shadow-rune)]"

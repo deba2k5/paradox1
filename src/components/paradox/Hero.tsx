@@ -155,13 +155,13 @@ export function Hero() {
         </p>
 
         {/* Logo + tagline: absolutely centered on the ring for mobile, normal flow on desktop */}
-        <div className="absolute top-[38%] left-1/2 w-[62vw] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center sm:relative sm:top-auto sm:left-auto sm:w-auto sm:translate-x-0 sm:translate-y-0 sm:mt-4">
+        <div className="absolute top-[calc(80vw-7rem)] left-1/2 w-[62vw] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center sm:relative sm:top-auto sm:left-auto sm:w-auto sm:translate-x-0 sm:translate-y-0 sm:mt-4">
           <img
             src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
             alt="Hero Image"
             className="w-full h-auto"
           />
-          <p className="mt-2 text-[0.75rem] tracking-[0.25em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base sm:tracking-[0.4em] font-bold">
+          <p className="mt-[1.5vw] text-[2.2vw] tracking-[0.2em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base sm:mt-2 sm:tracking-[0.4em] font-bold">
             8-Hour Hack Beyond Logic
           </p>
         </div>

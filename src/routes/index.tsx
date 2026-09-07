@@ -3,6 +3,7 @@ import { SiteNav } from "@/components/paradox/SiteNav";
 import { Hero } from "@/components/paradox/Hero";
 import { About } from "@/components/paradox/About";
 import { Guide } from "@/components/paradox/Guide";
+import { Prizes } from "@/components/paradox/Prizes";
 import { MysticScrollStage } from "@/components/paradox/MysticScrollStage";
 import { Schedule } from "@/components/paradox/Schedule";
 import { Faq } from "@/components/paradox/Faq";
@@ -39,6 +40,7 @@ function Index() {
         <MysticScrollStage>
           <About />
           <Guide />
+          <Prizes />
           <Schedule />
           <Faq />
         </MysticScrollStage>

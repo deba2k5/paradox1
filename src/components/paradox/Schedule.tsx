@@ -4,7 +4,6 @@ import { ScheduleTimeline } from "./ScheduleTimeline";
 import { scheduleItems } from "./schedule-data";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
-import { useLowPowerDevice } from "@/hooks/use-device-tier";
 import { ClientOnly } from "@/components/three/ClientOnly";
 
 // The WebGL rail drags in three.js and drei, so it is fetched on its own and
@@ -30,9 +29,10 @@ export function Schedule() {
   const sectionRef = useRef<HTMLElement>(null);
   useScrollReveal(sectionRef);
   const reducedMotion = usePrefersReducedMotion();
-  const lowPower = useLowPowerDevice();
   const [webglLost, setWebglLost] = useState(false);
-  const flat = reducedMotion || lowPower || webglLost;
+  // Phones get the rail too — it lays itself out for portrait, and anything
+  // that cannot hold a WebGL context drops to the flat timeline on its own.
+  const flat = reducedMotion || webglLost;
 
   return (
     <section id="schedule" ref={sectionRef} className="relative pt-24 sm:pt-32">

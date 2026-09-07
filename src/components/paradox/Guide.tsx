@@ -5,7 +5,7 @@ import { TiltCard } from "./TiltCard";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import cardRules from "@/assets/guide/card-rules.jpg";
+import prizeWinner from "@/assets/guide/prize-winner.jpg";
 import cardResources from "@/assets/guide/card-resources.png";
 import cardTimeline from "@/assets/guide/card-timeline.png";
 import cardTips from "@/assets/guide/card-tips.png";
@@ -16,7 +16,7 @@ const cards = [
     title: "Rules & Guidelines",
     copy: "Know the rules of the game. Eligibility, team size, code of conduct and more.",
     points: ["Teams of 2 – 4 sorcerers", "Original code written on-site", "Any stack, any realm"],
-    image: cardRules,
+    image: prizeWinner,
   },
   {
     icon: Box,

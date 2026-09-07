@@ -22,7 +22,9 @@ interface ScrollFrameSequenceProps {
 const WINDOW_AHEAD = 28;
 const WINDOW_BEHIND = 8;
 const EVICT_MARGIN = 2;
-const MAX_IN_FLIGHT = 6;
+// Browsers cap parallel requests per origin, so the frame loader deliberately
+// stays under that ceiling — saturating it starves scripts and other assets.
+const MAX_IN_FLIGHT = 3;
 
 function padIndex(index: number, padLength: number) {
   return String(index).padStart(padLength, "0");

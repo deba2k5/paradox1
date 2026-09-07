@@ -161,7 +161,7 @@ export function Hero() {
             alt="Hero Image"
             className="w-full h-auto"
           />
-          <p className="mt-2 text-[0.9rem] tracking-[0.25em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base sm:tracking-[0.4em] font-bold">
+          <p className="mt-2 text-[0.75rem] tracking-[0.25em] text-foreground uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-base sm:tracking-[0.4em] font-bold">
             8-Hour Hack Beyond Logic
           </p>
         </div>

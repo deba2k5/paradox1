@@ -228,6 +228,25 @@
   animation: drip 1.8s cubic-bezier(0.3, 0.8, 0.4, 1) both;
 }
 
+/* Marker caret that trails the graffiti typing effect — see TypedText. */
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@utility animate-caret-blink {
+  animation: caret-blink 1s steps(1, end) infinite;
+}
+
 /* Rough torn/stencil-cut card edge instead of a clean rounded rectangle. */
 @utility graffiti-panel {
   clip-path: polygon(

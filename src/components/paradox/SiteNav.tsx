@@ -65,10 +65,10 @@ export function SiteNav() {
 				<nav
 					role="navigation"
 					aria-label="Main"
-					className={`relative flex items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-500 sm:px-6 ${
+					className={`relative flex items-center justify-between rounded-full border-2 border-primary bg-black px-5 py-3 transition-all duration-500 sm:px-7 ${
 						scrolled
-							? "border-border bg-background/75 shadow-[var(--shadow-deep)] backdrop-blur-xl"
-							: "border-white/10 bg-background/35 backdrop-blur-md"
+							? "shadow-[0_18px_40px_rgba(0,0,0,0.75),0_0_22px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+							: "shadow-[0_10px_28px_rgba(0,0,0,0.55)]"
 					}`}
 				>
 					<a href="#home" className="group flex items-center gap-3 sm:gap-4">
@@ -150,7 +150,7 @@ export function SiteNav() {
 				{open ? (
 					<div
 						id="mobile-menu"
-						className="mt-2 origin-top-right rounded-2xl border border-border bg-background/95 px-5 py-4 shadow-[var(--shadow-deep)] backdrop-blur-xl md:hidden transform transition-all duration-200 ease-out scale-100 opacity-100"
+						className="mt-2 origin-top-right rounded-3xl border-2 border-primary bg-black px-5 py-4 shadow-[var(--shadow-deep)] md:hidden transform transition-all duration-200 ease-out scale-100 opacity-100"
 					>
 						<ul className="space-y-1">
 							{links.map((l) => (

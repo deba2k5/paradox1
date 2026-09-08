@@ -15,6 +15,7 @@ const links = [
 
 export function SiteNav() {
 	const [scrolled, setScrolled] = useState(false);
+	const [inPrizes, setInPrizes] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [active, setActive] = useState("#home");
 
@@ -28,10 +29,21 @@ export function SiteNav() {
 	}, [open]);
 
 	useEffect(() => {
-		const onScroll = () => setScrolled(window.scrollY > 24);
+		const onScroll = () => {
+			setScrolled(window.scrollY > 24);
+			const prizesEl = document.getElementById("prizes");
+			if (prizesEl) {
+				const rect = prizesEl.getBoundingClientRect();
+				setInPrizes(rect.top <= 100 && rect.bottom >= 60);
+			}
+		};
 		onScroll();
 		window.addEventListener("scroll", onScroll, { passive: true });
-		return () => window.removeEventListener("scroll", onScroll);
+		window.addEventListener("resize", onScroll, { passive: true });
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			window.removeEventListener("resize", onScroll);
+		};
 	}, []);
 
 	useEffect(() => {
@@ -54,22 +66,28 @@ export function SiteNav() {
 		return () => observer.disconnect();
 	}, []);
 
+	const isPrizeSection = inPrizes || active === "#prizes";
+
 	return (
 		<header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
 			<div className="relative mx-auto max-w-6xl">
 				<span
 					className={`pointer-events-none absolute inset-x-6 -bottom-1 h-3 rounded-full bg-[image:var(--gradient-mystic)] blur-xl transition-opacity duration-500 ${
-						scrolled ? "opacity-25" : "opacity-0"
+						scrolled && !isPrizeSection ? "opacity-25" : "opacity-0"
 					}`}
 					aria-hidden="true"
 				/>
 				<nav
 					role="navigation"
 					aria-label="Main"
-					className={`relative flex items-center justify-between rounded-full border-2 border-primary bg-black px-5 py-3 transition-all duration-500 sm:px-7 ${
-						scrolled
-							? "shadow-[0_18px_40px_rgba(0,0,0,0.75),0_0_22px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
-							: "shadow-[0_10px_28px_rgba(0,0,0,0.55)]"
+					className={`relative flex items-center justify-between rounded-full border-2 border-primary/50 bg-black/25 ${
+						isPrizeSection ? "backdrop-blur-none shadow-none" : "backdrop-blur-md"
+					} px-5 py-3 transition-all duration-500 sm:px-7 ${
+						!isPrizeSection
+							? scrolled
+								? "shadow-[0_18px_40px_rgba(0,0,0,0.75),0_0_22px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+								: "shadow-[0_10px_28px_rgba(0,0,0,0.55)]"
+							: ""
 					}`}
 				>
 					<a href="#home" className="group flex items-center gap-3 sm:gap-4">
@@ -151,7 +169,7 @@ export function SiteNav() {
 				{open ? (
 					<div
 						id="mobile-menu"
-						className="mt-2 origin-top-right rounded-3xl border-2 border-primary bg-black px-5 py-4 shadow-[var(--shadow-deep)] md:hidden transform transition-all duration-200 ease-out scale-100 opacity-100"
+						className="mt-2 origin-top-right rounded-3xl border-2 border-primary/50 bg-black/50 backdrop-blur-lg px-5 py-4 shadow-[var(--shadow-deep)] md:hidden transform transition-all duration-200 ease-out scale-100 opacity-100"
 					>
 						<ul className="space-y-2">
 							{links.map((l) => (

@@ -10,21 +10,19 @@ interface ScrollFrameSequenceProps {
   /** Element whose scroll position drives the frame scrub. */
   triggerRef: React.RefObject<HTMLElement | null>;
   basePath: string;
+  mobileBasePath?: string;
   frameCount: number;
   padLength?: number;
   extension?: string;
+  start?: string;
+  end?: string;
+  scrub?: boolean | number;
+  step?: number;
   className?: string;
   style?: React.CSSProperties;
 }
 
-// A decoded frame costs width*height*4 bytes, so the whole sequence can never
-// be held at once. Only a window around the playhead stays resident.
-const WINDOW_AHEAD = 28;
-const WINDOW_BEHIND = 8;
 const EVICT_MARGIN = 2;
-// Browsers cap parallel requests per origin, so the frame loader deliberately
-// stays under that ceiling — saturating it starves scripts and other assets.
-const MAX_IN_FLIGHT = 3;
 
 function padIndex(index: number, padLength: number) {
   return String(index).padStart(padLength, "0");
@@ -38,9 +36,14 @@ function padIndex(index: number, padLength: number) {
 export function ScrollFrameSequence({
   triggerRef,
   basePath,
+  mobileBasePath,
   frameCount,
   padLength = 4,
   extension = "jpg",
+  start = "top bottom",
+  end = "bottom top",
+  scrub = 0.4,
+  step: forcedStep,
   className,
   style,
 }: ScrollFrameSequenceProps) {
@@ -56,8 +59,16 @@ export function ScrollFrameSequence({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Sample the sequence more coarsely on constrained devices.
-    const step = lowPower ? 3 : 1;
+    const isMobile = window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches;
+    const activeBasePath = isMobile && mobileBasePath ? mobileBasePath : basePath;
+    const activeScrub =
+      typeof scrub === "number" && isMobile ? Math.min(scrub, 0.3) : scrub;
+    const windowAhead = isMobile ? 40 : 50;
+    const windowBehind = isMobile ? 16 : 20;
+    const maxInFlight = 6;
+
+    // Sample the sequence more coarsely on constrained devices unless forced or using mobileBasePath.
+    const step = forcedStep ?? (mobileBasePath && isMobile ? 1 : lowPower ? 2 : 1);
     const images = new Map<number, HTMLImageElement>();
     const pending = new Set<number>();
     const queue: number[] = [];
@@ -76,7 +87,8 @@ export function ScrollFrameSequence({
         dh = ch;
         dw = ch * imgRatio;
         dx = (cw - dw) / 2;
-        dy = 0;
+        // On mobile portrait, shift slightly down to ensure subject's head isn't clipped by top header
+        dy = isMobile ? Math.min(36, ch * 0.04) : 0;
       } else {
         dw = cw;
         dh = cw / imgRatio;
@@ -89,9 +101,13 @@ export function ScrollFrameSequence({
 
     const draw = (index: number, force = false) => {
       if (!force && index === lastDrawnIndex) return;
-      // Fall back to the nearest resident neighbour so scrubbing never flashes
-      // a blank frame while the exact frame is still in flight.
-      for (let offset = 0; offset <= 8; offset++) {
+      if (images.has(index)) {
+        drawCover(images.get(index)!);
+        lastDrawnIndex = index;
+        return;
+      }
+      // Check nearest neighbour within range
+      for (let offset = 1; offset <= 16; offset++) {
         const ahead = images.get(index + offset);
         if (ahead) {
           drawCover(ahead);
@@ -105,10 +121,23 @@ export function ScrollFrameSequence({
           return;
         }
       }
+      // Global fallback to nearest loaded frame
+      let closest: HTMLImageElement | null = null;
+      let minDiff = Infinity;
+      for (const [idx, img] of images.entries()) {
+        const diff = Math.abs(idx - index);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closest = img;
+        }
+      }
+      if (closest) {
+        drawCover(closest);
+      }
     };
 
     const pump = () => {
-      while (!cancelled && inFlight < MAX_IN_FLIGHT && queue.length) {
+      while (!cancelled && inFlight < maxInFlight && queue.length) {
         const index = queue.shift()!;
         if (images.has(index) || pending.has(index)) continue;
 
@@ -129,37 +158,75 @@ export function ScrollFrameSequence({
           settle();
         };
         img.onerror = settle;
-        img.src = `${basePath}/frame_${padIndex(index + 1, padLength)}.${extension}`;
+        img.src = `${activeBasePath}/frame_${padIndex(index + 1, padLength)}.${extension}`;
       }
     };
 
     /** Queue the frames near `center` and drop the ones far behind/ahead. */
     const ensureWindow = (center: number) => {
-      const hi = Math.min(frameCount - 1, center + WINDOW_AHEAD);
-      const lo = Math.max(0, center - WINDOW_BEHIND);
+      const hi = Math.min(frameCount - 1, center + windowAhead);
+      const lo = Math.max(0, center - windowBehind);
 
       queue.length = 0;
       for (let i = center; i <= hi; i += step) if (!images.has(i)) queue.push(i);
       for (let i = center - step; i >= lo; i -= step) if (!images.has(i)) queue.push(i);
 
-      const keepHi = Math.min(frameCount - 1, center + WINDOW_AHEAD * EVICT_MARGIN);
-      const keepLo = Math.max(0, center - WINDOW_BEHIND * EVICT_MARGIN);
-      for (const index of images.keys()) {
-        if (index < keepLo || index > keepHi) images.delete(index);
+      // Don't evict lightweight mobile frames so the full sequence stays resident
+      if (!isMobile || !mobileBasePath) {
+        const keepHi = Math.min(frameCount - 1, center + windowAhead * EVICT_MARGIN);
+        const keepLo = Math.max(0, center - windowBehind * EVICT_MARGIN);
+        for (const index of images.keys()) {
+          if (index < keepLo || index > keepHi) images.delete(index);
+        }
       }
 
       pump();
     };
 
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Background preloader: progressively loads the full sequence
+    const preloadAll = () => {
+      let nextIdx = 0;
+      const concurrency = isMobile ? 6 : 4;
+      let inFlightPreload = 0;
+
+      const stepPreload = () => {
+        if (cancelled) return;
+        while (inFlightPreload < concurrency && nextIdx < frameCount) {
+          const idx = nextIdx++;
+          if (images.has(idx) || pending.has(idx)) continue;
+          inFlightPreload++;
+          const pImg = new Image();
+          pImg.decoding = "async";
+          const done = () => {
+            inFlightPreload--;
+            stepPreload();
+          };
+          pImg.onload = () => {
+            if (!cancelled) {
+              images.set(idx, pImg);
+              if (Math.abs(idx - currentIndex) <= 2) draw(currentIndex, true);
+            }
+            done();
+          };
+          pImg.onerror = done;
+          pImg.src = `${activeBasePath}/frame_${padIndex(idx + 1, padLength)}.${extension}`;
+        }
+      };
+
+      stepPreload();
+    };
+
+    let dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMob = window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches;
+      dpr = isMob ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr));
       canvas.height = Math.max(1, Math.round(canvas.clientHeight * dpr));
       draw(currentIndex, true);
     };
 
     ensureWindow(0);
+    preloadAll();
     resize();
     const raf = requestAnimationFrame(resize);
     const ro = new ResizeObserver(resize);
@@ -173,9 +240,9 @@ export function ScrollFrameSequence({
         ease: "none",
         scrollTrigger: {
           trigger,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.4,
+          start,
+          end,
+          scrub: activeScrub,
         },
         onUpdate: () => {
           const next = Math.round(proxy.frame);
@@ -196,7 +263,7 @@ export function ScrollFrameSequence({
       images.clear();
       queue.length = 0;
     };
-  }, [triggerRef, basePath, frameCount, padLength, extension, reducedMotion, lowPower]);
+  }, [triggerRef, basePath, mobileBasePath, frameCount, padLength, extension, start, end, scrub, forcedStep, reducedMotion, lowPower]);
 
   return <canvas ref={canvasRef} aria-hidden="true" className={className} style={style} />;
 }

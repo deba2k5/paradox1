@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 import { SectionTitle } from "./RuneRing";
-import { TypedText } from "./TypedText";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const ABOUT_COPY =
@@ -47,7 +46,7 @@ export function About() {
           className="font-tag mt-10 max-w-3xl text-lg leading-[1.9] tracking-wide text-foreground/90 sm:text-xl sm:leading-[2]"
           style={{ textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 42px rgba(0,0,0,0.75)" }}
         >
-          <TypedText text={ABOUT_COPY} speed={22} />
+          {ABOUT_COPY}
         </p>
       </div>
     </section>

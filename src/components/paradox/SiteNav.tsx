@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import apsLogo from "@/assets/aps.png";
-import wieLogo from "@/assets/wie.png";
-import comsocLogo from "@/assets/comsoc.png";
+import apsLogo from "@/assets/logo-ieee-aps.jpeg";
+import wieLogo from "@/assets/logo-ieee-wie.jpeg";
+import comsocLogo from "@/assets/logo-ieee-comsoc.jpeg";
 
 const links = [
 	{ label: "Home", href: "#home" },
@@ -105,14 +105,14 @@ export function SiteNav() {
 						</span>
 					</span>
 
-					<ul className="hidden items-center gap-7 md:flex">
+					<ul className="hidden items-center gap-9 md:flex">
 						{links.map((l) => {
 							const isActive = active === l.href;
 							return (
 								<li key={l.href}>
 									<a
 										href={l.href}
-										className={`relative flex items-center gap-2 text-sm font-semibold tracking-wide transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:text-primary hover:after:w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 [font-family:var(--font-display)] ${
+										className={`relative flex items-center gap-2 text-sm font-semibold tracking-wide transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:text-primary hover:after:w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
 											isActive ? "text-primary after:w-full" : "text-foreground/85"
 										}`}
 									>
@@ -131,7 +131,7 @@ export function SiteNav() {
 
 					<a
 						href="#register"
-						className="graffiti-btn hidden rounded-lg border-0 bg-[image:var(--gradient-mystic)] px-5 py-2.5 text-sm font-bold tracking-widest text-primary-foreground uppercase shadow-[var(--shadow-rune)] transform transition-transform hover:scale-105 md:inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-family:var(--font-sans)]"
+						className="graffiti-btn hidden rounded-lg border-0 bg-[image:var(--gradient-mystic)] px-5 py-2.5 text-sm font-bold tracking-widest text-primary-foreground uppercase shadow-[var(--shadow-rune)] transform transition-transform hover:scale-105 md:inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 					>
 						Register
 					</a>
@@ -153,13 +153,13 @@ export function SiteNav() {
 						id="mobile-menu"
 						className="mt-2 origin-top-right rounded-3xl border-2 border-primary bg-black px-5 py-4 shadow-[var(--shadow-deep)] md:hidden transform transition-all duration-200 ease-out scale-100 opacity-100"
 					>
-						<ul className="space-y-2">
+						<ul className="space-y-1">
 							{links.map((l) => (
 								<li key={l.href}>
 									<a
 										href={l.href}
 										onClick={() => setOpen(false)}
-										className={`flex items-center gap-2 py-2.5 text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-family:var(--font-display)] ${
+										className={`flex items-center gap-2 py-2.5 text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
 											active === l.href ? "text-primary" : "text-foreground/85"
 										}`}
 									>
@@ -177,7 +177,7 @@ export function SiteNav() {
 								<a
 									href="#register"
 									onClick={() => setOpen(false)}
-									className="mt-3 block rounded-md bg-[image:var(--gradient-mystic)] px-4 py-3 text-center text-sm font-bold tracking-widest text-primary-foreground uppercase focus:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-family:var(--font-sans)]"
+									className="mt-2 block rounded-md bg-[image:var(--gradient-mystic)] px-4 py-2.5 text-center text-sm font-bold tracking-widest text-primary-foreground uppercase focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 								>
 									Register Now
 								</a>

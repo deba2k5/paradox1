@@ -14,6 +14,9 @@ export function PortalIntro() {
   const flashRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Remove the server-side pre-curtain now that the JS overlay is ready
+    document.getElementById("pre-curtain")?.remove();
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       setMounted(false);

@@ -117,7 +117,7 @@ export function Hero() {
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-contain object-top sm:object-cover sm:object-center"
+          className="absolute inset-0 h-full w-full object-contain object-top sm:object-contain sm:object-top"
         >
           <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
           <source src={VIDEO_MOBILE} type="video/mp4" />
@@ -127,7 +127,7 @@ export function Hero() {
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-contain object-top sm:object-cover sm:object-center"
+          className="absolute inset-0 h-full w-full object-contain object-top sm:object-contain sm:object-top"
           style={{ opacity: 0 }}
         >
           <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />

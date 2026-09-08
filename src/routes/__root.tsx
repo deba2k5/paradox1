@@ -118,6 +118,18 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/* Pre-curtain: renders server-side so it exists before any JS loads,
+            preventing the flash of site content before PortalIntro mounts. */}
+        <div
+          id="pre-curtain"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 300,
+            background: "oklch(0.11 0.015 20)",
+            pointerEvents: "none",
+          }}
+        />
         {children}
         <Scripts />
       </body>

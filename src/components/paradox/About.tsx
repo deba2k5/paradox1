@@ -20,7 +20,7 @@ export function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col justify-center py-24 sm:py-32"
+      className="relative flex min-h-[210vh] flex-col justify-start pt-36 sm:pt-44 pb-32"
     >
       <div className="relative mx-auto w-full max-w-6xl px-5">
         <div className="reveal reveal-target">
@@ -43,7 +43,7 @@ export function About() {
         </ul>
 
         <p
-          className="font-tag mt-10 max-w-3xl text-lg leading-[1.9] tracking-wide text-foreground/90 sm:text-xl sm:leading-[2]"
+          className="font-display font-medium mt-8 max-w-3xl text-base leading-relaxed tracking-wide text-foreground/90 sm:text-lg sm:leading-[1.85]"
           style={{ textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 42px rgba(0,0,0,0.75)" }}
         >
           {ABOUT_COPY}

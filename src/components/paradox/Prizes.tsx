@@ -94,6 +94,10 @@ export function Prizes() {
           <div className="absolute inset-0 bg-[radial-gradient(115%_85%_at_50%_50%,transparent_0%,transparent_55%,color-mix(in_oklab,var(--background)_65%,transparent)_84%,var(--background)_100%)]" />
         </div>
 
+        {/* Top and bottom edge blending into Guide and Schedule */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-background via-background/70 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
+
         {/* Top: Header stays firmly at the top of the prize section */}
         <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6">
           <div className="max-w-xl">
@@ -131,12 +135,11 @@ export function Prizes() {
                   }}
                 >
                   <TiltCard
-                    glowColor="var(--accent)"
                     sparkCount={7}
                     className="overflow-hidden rounded-xl sm:rounded-2xl"
                   >
                     <div
-                      className="relative w-full h-[310px] xs:h-[360px] sm:h-[270px] md:h-[300px] lg:h-[340px] overflow-hidden rounded-xl sm:rounded-2xl border border-accent/25 shadow-[var(--shadow-deep)] transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                      className="relative w-full h-[310px] xs:h-[360px] sm:h-[270px] md:h-[300px] lg:h-[340px] overflow-hidden rounded-xl sm:rounded-2xl border border-accent/25 shadow-[var(--shadow-deep)] transition-all duration-300 group-hover:border-primary/40"
                     >
                       {/* podium still — the realm's own champions stand in for the trophy */}
                       <img
@@ -147,8 +150,6 @@ export function Prizes() {
                         style={{ filter: "sepia(0.3) saturate(1.8) hue-rotate(-10deg) brightness(0.8)" }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-                      {/* Yellow background on hover */}
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-amber-500/25 via-amber-400/12 to-amber-300/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-active:opacity-100 mix-blend-screen" />
                       {big && (
                         <span
                           aria-hidden="true"

@@ -1,47 +1,39 @@
 import { useRef, type ReactNode } from "react";
-import { RuneRing } from "./RuneRing";
 import { ScrollFrameSequence } from "./ScrollFrameSequence";
-import nebula from "@/assets/bg-nebula-cave.jpg";
 
 /**
- * Pins a viewport-sized canvas behind its children and scrubs the frame
- * sequence across the full height of the stage, so a single continuous
- * "video" plays while the reader scrolls past every section inside it.
+ * Pins a viewport-sized canvas behind its children (About and Hacker's Guide)
+ * and scrubs the full Doctor Strange animation seamlessly across both sections.
  */
 export function MysticScrollStage({ children }: { children: ReactNode }) {
   const stageRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={stageRef} className="relative">
-      <div className="pointer-events-none sticky top-0 h-screen w-full overflow-hidden">
-        <img
-          src={nebula}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
-          style={{ filter: "sepia(0.6) saturate(2.2) hue-rotate(-30deg) brightness(0.6)" }}
-        />
-
+    <div id="mystic-stage" ref={stageRef} className="relative bg-background">
+      <div className="pointer-events-none sticky top-0 h-screen h-[100dvh] w-full overflow-hidden">
         <ScrollFrameSequence
           triggerRef={stageRef}
+          triggerSelector="#mystic-stage"
           basePath="/about-frames"
-          frameCount={256}
-          className="absolute inset-0 h-full w-full opacity-85"
-          style={{ filter: "sepia(0.3) hue-rotate(-10deg) saturate(1.15) brightness(0.5) contrast(1.05)" }}
+          mobileBasePath="/about frames mobile"
+          mobilePrefix="ezgif-frame-"
+          mobilePadLength={3}
+          frameCount={173}
+          mobileFrameCount={172}
+          start="top top"
+          end="bottom bottom"
+          scrub={0.4}
+          step={1}
+          className="h-full w-full"
         />
 
-        {/* flat veil — keeps the brightest frames from blowing out the type */}
-        <div className="absolute inset-0 bg-[color-mix(in_oklab,var(--background)_35%,transparent)]" />
-
-        {/* filmic vignette — frames the backdrop, edges only */}
-        <div className="absolute inset-0 bg-[radial-gradient(115%_85%_at_50%_50%,transparent_0%,transparent_55%,color-mix(in_oklab,var(--background)_70%,transparent)_82%,var(--background)_100%)]" />
-        {/* heading zone stays readable no matter which frame is on screen */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--background)_0%,color-mix(in_oklab,var(--background)_78%,transparent)_18%,color-mix(in_oklab,var(--background)_30%,transparent)_34%,transparent_48%,transparent_84%,var(--background)_100%)]" />
-
-        <RuneRing className="animate-glow top-24 -right-40 h-[30rem] w-[30rem]" />
+        {/* Seamless blend with Hero above and Hacker's Guide below */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-background via-background/60 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_50%,transparent_0%,transparent_65%,color-mix(in_oklab,var(--background)_50%,transparent)_85%,var(--background)_100%)] z-10" />
       </div>
 
-      <div className="relative -mt-[100vh]">{children}</div>
+      <div className="relative -mt-[100vh] -mt-[100dvh]">{children}</div>
     </div>
   );
 }

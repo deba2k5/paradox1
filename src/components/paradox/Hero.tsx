@@ -189,7 +189,7 @@ export function Hero() {
 
       </div>
 
-      <div className="relative border-t border-white/10">
+      <div className="relative border-t border-white/10 bg-gradient-to-b from-transparent via-background/40 to-background/90">
         <dl className="mx-auto grid max-w-7xl grid-cols-2 divide-white/10 px-5 py-6 sm:grid-cols-4 sm:divide-x">
           {[
             ["1000+", "Hackers"],
@@ -206,6 +206,7 @@ export function Hero() {
           ))}
         </dl>
       </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-background" />
     </section>
   );
 }

@@ -39,11 +39,11 @@ function Index() {
         <Hero />
         <MysticScrollStage>
           <About />
-          <Guide />
-          <Prizes />
-          <Schedule />
-          <Faq />
         </MysticScrollStage>
+        <Guide />
+        <Prizes />
+        <Schedule />
+        <Faq />
         <Register />
       </main>
       <SiteFooter />

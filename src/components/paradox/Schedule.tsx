@@ -36,6 +36,9 @@ export function Schedule() {
 
   return (
     <section id="schedule" ref={sectionRef} className="relative pt-24 sm:pt-32">
+      {/* Ambient mystical glow behind the 3D rail */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_50%_at_50%_35%,color-mix(in_oklab,var(--primary)_7%,transparent)_0%,transparent_70%)]" />
+
       <div className="mx-auto max-w-6xl px-5">
         <div className="reveal reveal-target">
           <SectionTitle

@@ -12,6 +12,10 @@ export function Register() {
 
   return (
     <section id="register" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32">
+      {/* Seamless blend with FAQ above and Footer below */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background via-background/70 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/70 to-transparent z-10" />
+
       <img
         src={crystalTunnel}
         alt=""
@@ -58,7 +62,7 @@ export function Register() {
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-border bg-background/80">
+    <footer className="relative overflow-hidden border-t border-primary/20 bg-background/70 backdrop-blur-sm">
       <div
         className="pointer-events-none absolute inset-x-0 -top-24 h-64 opacity-70"
         aria-hidden="true"

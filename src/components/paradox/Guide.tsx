@@ -96,8 +96,13 @@ export function Guide() {
     <section
       id="guide"
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col justify-center py-24 sm:py-32"
+      className="relative z-10 flex min-h-screen flex-col justify-center overflow-hidden py-24 sm:py-32"
     >
+      {/* Seamless blend with About above and Prizes below */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background via-background/70 to-transparent -z-10" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_45%,color-mix(in_oklab,var(--primary)_8%,transparent)_0%,transparent_70%)] -z-10" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/70 to-transparent -z-10" />
+
       <div className="relative mx-auto w-full max-w-6xl px-5">
         <div className="reveal reveal-target">
           <SectionTitle eyebrow="Your spellbook to innovate." align="left" title="Hackers Guide" />

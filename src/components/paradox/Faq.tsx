@@ -40,7 +40,12 @@ export function Faq() {
   useScrollReveal(sectionRef);
 
   return (
-    <section id="faq" ref={sectionRef} className="relative py-24 sm:py-32">
+    <section id="faq" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32">
+      {/* Seamless blend with Schedule above and Register below */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-background via-background/60 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,color-mix(in_oklab,var(--accent)_6%,transparent)_0%,transparent_70%)] -z-10" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/60 to-transparent z-10" />
+
       <div className="mx-auto max-w-3xl px-5">
         <div className="reveal reveal-target">
           <SectionTitle eyebrow="Answers from the ancient one" title="FAQ" />

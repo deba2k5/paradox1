@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { Crown } from "lucide-react";
 import { SectionTitle } from "./RuneRing";
 import { TiltCard } from "./TiltCard";
+import { ScrollFrameSequence } from "./ScrollFrameSequence";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import cardRules from "@/assets/guide/card-rules.jpg";
 import prize1st from "@/assets/guide/prize-1st.jpg";
@@ -21,8 +22,23 @@ export function Prizes() {
     <section
       id="prizes"
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col justify-center py-20 sm:py-32"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden py-20 sm:py-32"
     >
+      {/* the prize podium runs its own scroll-scrubbed reel over the main one */}
+      <div className="absolute inset-0 h-full w-full">
+        <ScrollFrameSequence
+          triggerRef={sectionRef}
+          basePath="/prize-frames"
+          frameCount={99}
+          className="h-full w-full opacity-95"
+          style={{ filter: "sepia(0.18) hue-rotate(-6deg) saturate(1.25) brightness(0.72) contrast(1.05)" }}
+        />
+        <div className="absolute inset-0 bg-[color-mix(in_oklab,var(--background)_26%,transparent)]" />
+        {/* fade into the sequence running behind the neighbouring sections */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--background)_0%,transparent_20%,transparent_80%,var(--background)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(115%_85%_at_50%_50%,transparent_0%,transparent_55%,color-mix(in_oklab,var(--background)_65%,transparent)_84%,var(--background)_100%)]" />
+      </div>
+
       <div className="relative mx-auto w-full max-w-6xl px-5">
         <div className="reveal reveal-target">
           <SectionTitle eyebrow="Glory for those who bend reality." align="left" title="Prize Pool" />

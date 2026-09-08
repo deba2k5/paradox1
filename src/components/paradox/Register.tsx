@@ -76,13 +76,13 @@ export function SiteFooter() {
         <div>
           <p className="font-graffiti flame-text -rotate-1 text-3xl font-normal">PARADOX</p>
           <p className="font-tag mt-2 text-sm text-primary/80">One reality was never enough.</p>
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground [font-family:var(--font-display)]">
             A hackathon beyond logic, presented by IEEE IEM–UEM Student Branch, ComSoc, AP-S and
             WIE.
           </p>
         </div>
         <div>
-          <p className="text-xs tracking-[0.35em] text-primary uppercase">Explore</p>
+          <p className="text-xs tracking-[0.35em] text-primary uppercase [font-family:var(--font-display)]">Explore</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {[
               ["Home", "#home"],
@@ -92,7 +92,7 @@ export function SiteFooter() {
               ["FAQ", "#faq"],
             ].map(([label, href]) => (
               <li key={href}>
-                <a href={href} className="transition-colors hover:text-primary">
+                <a href={href} className="transition-colors hover:text-primary [font-family:var(--font-display)]">
                   {label}
                 </a>
               </li>
@@ -100,8 +100,8 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <p className="text-xs tracking-[0.35em] text-primary uppercase">Reach the Sanctum</p>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="text-xs tracking-[0.35em] text-primary uppercase [font-family:var(--font-display)]">Reach the Sanctum</p>
+          <p className="mt-4 text-sm text-muted-foreground [font-family:var(--font-display)]">
             Gurukul Building, IEM Saltlake, Kolkata
           </p>
           <div className="mt-4 flex gap-4 text-muted-foreground">
@@ -120,7 +120,7 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="relative border-t border-border py-5 text-center text-xs tracking-[0.2em] text-muted-foreground uppercase">
+      <div className="relative border-t border-border py-5 text-center text-xs tracking-[0.2em] text-muted-foreground uppercase [font-family:var(--font-sans)]">
         © 2026 PARADOX · IEEE Student Branch · Terms &amp; Support · Privacy Policy
       </div>
     </footer>

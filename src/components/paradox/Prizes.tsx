@@ -67,7 +67,15 @@ export function Prizes() {
     >
       <div className="sticky top-0 flex h-screen w-full flex-col overflow-hidden pt-20 sm:pt-28">
         {/* the prize podium runs its own scroll-scrubbed reel over the main one */}
-        <div className="absolute inset-0 h-full w-full">
+        <div
+          className="absolute inset-0 h-full w-full"
+          style={{
+            maskImage:
+              "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.65) 12%, #000 26%, #000 74%, rgba(0,0,0,0.65) 88%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.65) 12%, #000 26%, #000 74%, rgba(0,0,0,0.65) 88%, transparent 100%)",
+          }}
+        >
           <ScrollFrameSequence
             triggerRef={sectionRef}
             basePath="/prize-frames"

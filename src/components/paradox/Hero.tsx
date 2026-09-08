@@ -109,7 +109,7 @@ export function Hero() {
   };
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden pt-28">
+    <section id="home" className="relative flex min-h-screen flex-col overflow-hidden pt-28">
       {/* Dual-video wrapper: crossfade between vidA and vidB for seamless looping */}
       <div ref={videoWrapRef} className="absolute inset-0 overflow-hidden">
         <video
@@ -148,7 +148,9 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col items-center justify-center px-5 pb-24 text-center">
+      {/* flex-1 so the hero and the stat rail together fill exactly one screen —
+          a fixed 100vh here pushed the stats permanently below the fold */}
+      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-5 pb-6 text-center sm:pb-10">
         {/* Desktop-only tag */}
         <p className="hidden sm:inline-block font-tag rotate-2 text-sm tracking-[0.2em] text-accent uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] sm:text-lg">
           Code Beyond Reality

@@ -56,7 +56,14 @@ export function PortalIntro() {
     });
     timelineRef.current = tl;
 
-    tl.set(zoomWrap, { scale: 1, transformOrigin: "50% 50%" })
+    const isPortrait =
+      typeof window !== "undefined" &&
+      window.matchMedia("(orientation: portrait), (max-width: 639px)").matches;
+
+    tl.set(zoomWrap, {
+      scale: 1,
+      transformOrigin: isPortrait ? "50% 55.5%" : "50% 56.2%",
+    })
       // Phase 1: Subtle, pristine camera push as sparks form the circle
       .to(zoomWrap, {
         scale: 1.15,
@@ -126,6 +133,19 @@ export function PortalIntro() {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Keep transformOrigin in sync if device rotates or window resizes
+    const onResize = () => {
+      if (!zoomWrapRef.current) return;
+      const isPortraitNow = window.matchMedia(
+        "(orientation: portrait), (max-width: 639px)",
+      ).matches;
+      gsap.set(zoomWrapRef.current, {
+        transformOrigin: isPortraitNow ? "50% 55.5%" : "50% 56.2%",
+      });
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+
     const video = videoRef.current;
     if (video) {
       // Start zoom in lockstep as soon as video starts playing
@@ -151,6 +171,8 @@ export function PortalIntro() {
     }, 4500);
 
     return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
       clearTimeout(safetyTimer);
       timelineRef.current?.kill();
       document.body.style.overflow = prevOverflow;
@@ -168,8 +190,8 @@ export function PortalIntro() {
       tabIndex={0}
       aria-label="Loading animation - click anywhere to skip"
     >
-      {/* Position offset container: shifts video a bit up so the portal creation is centered on screen */}
-      <div className="relative h-[114%] w-full flex items-center justify-center -translate-y-[5.5vh]">
+      {/* Responsive position container: handles phones, tablets, and desktops in both portrait and landscape */}
+      <div className="relative w-full flex items-center justify-center max-sm:h-full max-sm:-translate-y-[5vh] portrait:h-full portrait:-translate-y-[5vh] sm:landscape:h-[116%] sm:landscape:-translate-y-[7.2vh]">
         <div
           ref={zoomWrapRef}
           className="relative h-full w-full flex items-center justify-center will-change-transform"
@@ -181,7 +203,7 @@ export function PortalIntro() {
             playsInline
             preload="auto"
             onEnded={dismiss}
-            className="h-full w-full object-cover object-center pointer-events-none"
+            className="h-full w-full max-sm:object-contain portrait:object-contain sm:landscape:object-cover object-center pointer-events-none"
             style={{
               filter: "contrast(1.08) brightness(1.04)",
               transform: "translateZ(0)",
@@ -189,9 +211,25 @@ export function PortalIntro() {
               WebkitBackfaceVisibility: "hidden",
             }}
           >
-            <source src="/load.mp4" type='video/mp4; codecs="av01.0.08M.10"' />
-            <source src="/load-h264.mp4" type="video/mp4" />
+            {/* Portrait devices (phones, tablets in portrait, narrow windows) */}
+            <source
+              src="/load-phone.mp4"
+              type="video/mp4"
+              media="(orientation: portrait), (max-width: 639px)"
+            />
+            {/* Landscape devices (desktops, laptops, tablets in landscape, phones in landscape) */}
+            <source
+              src="/load.mp4"
+              type='video/mp4; codecs="av01.0.08M.10"'
+              media="(orientation: landscape) and (min-width: 640px)"
+            />
+            <source
+              src="/load-h264.mp4"
+              type="video/mp4"
+              media="(orientation: landscape) and (min-width: 640px)"
+            />
             <source src="/load.mp4" type="video/mp4" />
+            <source src="/load-phone.mp4" type="video/mp4" />
           </video>
         </div>
       </div>
@@ -199,24 +237,12 @@ export function PortalIntro() {
       {/* Subtle mystic flash effect when portal opens */}
       <div
         ref={flashRef}
-        className="pointer-events-none absolute inset-0 opacity-0 -translate-y-[5.5vh]"
+        className="pointer-events-none absolute inset-0 opacity-0 max-sm:-translate-y-[5vh] portrait:-translate-y-[5vh] sm:landscape:-translate-y-[7.2vh]"
         style={{
           background:
             "radial-gradient(circle, oklch(0.98 0.02 40) 0%, var(--accent) 35%, var(--primary) 60%, transparent 80%)",
         }}
       />
-
-      {/* Skip button */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          dismiss();
-        }}
-        className="absolute bottom-6 right-6 z-20 text-[10px] tracking-[0.25em] text-muted-foreground/70 hover:text-accent uppercase transition-colors px-3.5 py-1.5 rounded-full border border-white/10 hover:border-accent/40 bg-black/50 backdrop-blur-sm cursor-pointer"
-      >
-        Skip ➔
-      </button>
     </div>
   );
 }

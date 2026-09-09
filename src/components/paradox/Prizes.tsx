@@ -99,7 +99,7 @@ export function Prizes() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
 
         {/* Header: moved further down on mobile, firmly at top on desktop */}
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 translate-y-44 xs:translate-y-48 min-[400px]:translate-y-56 min-[480px]:translate-y-64 sm:translate-y-0">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 translate-y-28 xs:translate-y-32 min-[400px]:translate-y-36 min-[480px]:translate-y-40 sm:translate-y-0">
           <div className="max-w-xl">
             <SectionTitle eyebrow="Glory for those who bend reality." align="left" title="Prize Pool" />
           </div>

@@ -1,4 +1,11 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  type CSSProperties,
+} from "react";
 import { scheduleItems as items } from "./schedule-data";
 
 const HOUR_MARKS = ["8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7"];
@@ -7,15 +14,111 @@ const LANE_RIGHT = 54;
 const GUTTER_WIDTH = 64;
 const BASE_GAP = 64;
 const MINUTE_PX = 0.55;
+const TOTAL_FRAMES = 148;
+
+/** Preload all timeline frames as Image objects for smooth scrubbing. */
+function preloadFrames(): HTMLImageElement[] {
+  const imgs: HTMLImageElement[] = [];
+  for (let i = 1; i <= TOTAL_FRAMES; i++) {
+    const img = new Image();
+    const padded = String(i).padStart(3, "0");
+    img.src = `/timeline-frames-opt/frame-${padded}.jpg`;
+    imgs.push(img);
+  }
+  return imgs;
+}
 
 /** Flat, no-WebGL rendering of the day — used for reduced motion and low-power devices. */
 export function ScheduleTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const currentFrameRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
   const [path, setPath] = useState("");
   const [segments, setSegments] = useState<string[]>([]);
   const [height, setHeight] = useState(0);
+  const [framesReady, setFramesReady] = useState(false);
 
+  // ── Preload frames once ────────────────────────────────────────────────────
+  useEffect(() => {
+    const imgs = preloadFrames();
+    framesRef.current = imgs;
+    // Wait for the first frame so we can paint immediately
+    if (imgs[0]) {
+      imgs[0].onload = () => setFramesReady(true);
+      if (imgs[0].complete) setFramesReady(true);
+    }
+  }, []);
+
+  // ── Draw a specific frame to the canvas ──────────────────────────────────
+  const drawFrame = useCallback((index: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const img = framesRef.current[index];
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  }, []);
+
+  // ── Scroll-driven frame scrubbing ─────────────────────────────────────────
+  useEffect(() => {
+    if (!framesReady) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const onScroll = () => {
+      const rect = section.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      // Progress: 0 when section top hits bottom of viewport, 1 when section bottom hits top
+      const progress = Math.min(
+        1,
+        Math.max(0, (viewH - rect.top) / (rect.height + viewH))
+      );
+      const targetFrame = Math.min(
+        TOTAL_FRAMES - 1,
+        Math.floor(progress * TOTAL_FRAMES)
+      );
+
+      if (targetFrame !== currentFrameRef.current) {
+        currentFrameRef.current = targetFrame;
+        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(() => drawFrame(targetFrame));
+      }
+    };
+
+    // Draw initial frame
+    drawFrame(0);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // Run immediately in case section is visible
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [framesReady, drawFrame]);
+
+  // ── Resize canvas to match section dimensions ─────────────────────────────
+  useEffect(() => {
+    const section = sectionRef.current;
+    const canvas = canvasRef.current;
+    if (!section || !canvas) return;
+
+    const updateCanvas = () => {
+      canvas.width = section.offsetWidth;
+      canvas.height = section.offsetHeight;
+      drawFrame(currentFrameRef.current);
+    };
+
+    updateCanvas();
+    const ro = new ResizeObserver(updateCanvas);
+    ro.observe(section);
+    return () => ro.disconnect();
+  }, [drawFrame]);
+
+  // ── SVG path recompute ────────────────────────────────────────────────────
   useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -42,7 +145,7 @@ export function ScheduleTimeline() {
       const first = points[0]!;
       let d = `M ${first.x} ${first.y}`;
       const segs: string[] = [];
-      const NODE_GAP = 17; // keep the arrowhead clear of the next node's icon circle
+      const NODE_GAP = 17;
       for (let i = 1; i < points.length; i++) {
         const p0 = points[i - 1]!;
         const p1 = points[i]!;
@@ -72,8 +175,27 @@ export function ScheduleTimeline() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-5">
-      <div>
+    <div ref={sectionRef} className="relative mx-auto max-w-6xl px-5">
+      {/* ── Scroll-driven frame animation background ── */}
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        style={{ objectFit: "cover" }}
+      />
+
+      {/* Dark overlay so timeline content stays legible */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.72) 100%)",
+        }}
+      />
+
+      {/* Timeline content — positioned above the canvas */}
+      <div className="relative z-10">
         <div ref={containerRef} className="relative mx-auto mt-16 max-w-5xl">
           {/* hour ruler ticking down the 8-hour sprint — desktop only */}
           <div
@@ -96,10 +218,10 @@ export function ScheduleTimeline() {
             preserveAspectRatio="none"
             aria-hidden="true"
           >
-            {/* faint backbone line, just to seat the glowing arrow links */}
+            {/* faint backbone line */}
             <path d={path} fill="none" stroke="url(#zigzag-gradient)" strokeWidth="1" strokeOpacity="0.35" />
 
-            {/* a lit, directional arrow linking each event to the next */}
+            {/* lit, directional arrow links */}
             {segments.map((seg, i) => (
               <path
                 key={i}
@@ -160,7 +282,7 @@ export function ScheduleTimeline() {
             </defs>
           </svg>
 
-          {/* mobile fallback: simple straight guide line, lit end to end */}
+          {/* mobile fallback: simple straight guide line */}
           <span
             className="absolute top-0 bottom-0 left-3 w-px bg-[image:var(--gradient-mystic)] shadow-[0_0_8px_var(--accent)] sm:hidden"
             aria-hidden="true"

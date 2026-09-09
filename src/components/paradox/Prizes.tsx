@@ -98,14 +98,14 @@ export function Prizes() {
         <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-background via-background/70 to-transparent z-10" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
 
-        {/* Top: Header stays firmly at the top of the prize section */}
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6">
+        {/* Header: moved further down on mobile, firmly at top on desktop */}
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 translate-y-44 xs:translate-y-48 min-[400px]:translate-y-56 min-[480px]:translate-y-64 sm:translate-y-0">
           <div className="max-w-xl">
             <SectionTitle eyebrow="Glory for those who bend reality." align="left" title="Prize Pool" />
           </div>
         </div>
 
-        {/* Cards container: centered vertically on mobile, shifted down on desktop */}
+        {/* Cards container: centered vertically on mobile, shifted down on desktop (original position) */}
         <div className="relative z-10 mx-auto flex-1 flex items-center sm:items-end w-full max-w-[1540px] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl px-1.5 xs:px-2.5 sm:px-6 md:px-8 pt-10 sm:pt-2 pb-2 sm:pb-8 md:pb-10 lg:pb-12">
           <div className="w-full grid grid-cols-3 gap-1.5 xs:gap-3 sm:gap-3 md:gap-4 lg:gap-5 items-center">
             {prizes.map(({ place, prize, note, big, image }, index) => {

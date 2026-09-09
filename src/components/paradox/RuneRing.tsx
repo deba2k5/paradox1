@@ -68,12 +68,20 @@ export function RuneRing({ className = "" }: { className?: string }) {
 
 /** A hand-sprayed underline in place of a ruled line — a rough wavy stroke with a
  *  paint drip hanging off it, like a can dragged once under a freshly tagged word. */
-function SprayUnderline({ align }: { align: "center" | "left" }) {
+function SprayUnderline({
+  align,
+  className = "",
+  svgClassName = "",
+}: {
+  align: "center" | "left";
+  className?: string;
+  svgClassName?: string;
+}) {
   return (
-    <div className={`mt-4 ${align === "center" ? "flex justify-center" : ""}`}>
+    <div className={`mt-4 ${align === "center" ? "flex justify-center" : ""} ${className}`}>
       <svg
         viewBox="0 0 220 34"
-        className="spray-stroke h-7 w-40 text-primary sm:w-56"
+        className={`spray-stroke h-7 w-40 text-primary sm:w-56 ${svgClassName}`}
         aria-hidden="true"
       >
         <path
@@ -108,25 +116,35 @@ export function SectionTitle({
   eyebrow,
   title,
   align = "center",
+  className = "",
+  titleClassName = "",
+  eyebrowClassName = "",
+  underlineClassName = "",
+  svgClassName = "",
 }: {
   eyebrow?: string;
   title: string;
   align?: "center" | "left";
+  className?: string;
+  titleClassName?: string;
+  eyebrowClassName?: string;
+  underlineClassName?: string;
+  svgClassName?: string;
 }) {
   return (
-    <div className={align === "center" ? "text-center" : "text-left"}>
+    <div className={`${align === "center" ? "text-center" : "text-left"} ${className}`}>
       {eyebrow ? (
         <p
-          className="font-tag inline-block -rotate-2 text-xs tracking-[0.3em] text-accent uppercase"
+          className={`font-tag inline-block -rotate-2 text-xs tracking-[0.3em] text-accent uppercase ${eyebrowClassName}`}
           style={{ textShadow: "2px 2px 0 color-mix(in oklab, var(--primary) 70%, black)" }}
         >
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-graffiti stencil-text mt-3 text-4xl leading-tight font-normal sm:text-6xl">
+      <h2 className={`font-graffiti stencil-text mt-3 text-4xl leading-tight font-normal sm:text-6xl ${titleClassName}`}>
         {title}
       </h2>
-      <SprayUnderline align={align} />
+      <SprayUnderline align={align} className={underlineClassName} svgClassName={svgClassName} />
     </div>
   );
 }

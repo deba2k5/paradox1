@@ -62,6 +62,7 @@ export function PortalIntro() {
 
     tl.set(zoomWrap, {
       scale: 1,
+      force3D: true,
       transformOrigin: isPortrait ? "50% 55.5%" : "50% 56.2%",
     })
       // Phase 1: Subtle, pristine camera push as sparks form the circle
@@ -69,12 +70,14 @@ export function PortalIntro() {
         scale: 1.15,
         duration: 2.2,
         ease: "power1.inOut",
+        force3D: true,
       })
       // Phase 2: Dynamic push into the portal as it expands
       .to(zoomWrap, {
         scale: 1.45,
         duration: 0.9,
         ease: "power2.in",
+        force3D: true,
       })
       // Phase 3: Final threshold push as the portal opens wide
       .to(
@@ -83,6 +86,7 @@ export function PortalIntro() {
           scale: 1.75,
           duration: 0.55,
           ease: "power2.in",
+          force3D: true,
         },
         "-=0.1",
       );
@@ -195,6 +199,11 @@ export function PortalIntro() {
         <div
           ref={zoomWrapRef}
           className="relative h-full w-full flex items-center justify-center will-change-transform"
+          style={{
+            transform: "translate3d(0, 0, 0)",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
         >
           <video
             ref={videoRef}
@@ -205,8 +214,7 @@ export function PortalIntro() {
             onEnded={dismiss}
             className="h-full w-full max-sm:object-contain portrait:object-contain sm:landscape:object-cover object-center pointer-events-none"
             style={{
-              filter: "contrast(1.08) brightness(1.04)",
-              transform: "translateZ(0)",
+              transform: "translate3d(0, 0, 0)",
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
             }}

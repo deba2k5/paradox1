@@ -4,12 +4,12 @@ import { SectionTitle } from "./RuneRing";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const ABOUT_COPY =
-  "PARADOX is an 8-hour hackathon where reality bends to your code. On 3rd October 2026, a thousand brilliant minds converge at IEM Saltlake to question conventions, break every boundary, and build the impossible before the clock runs out. One day. Eight hours. Infinite timelines. Dare to be the exception.";
+  "PARADOX is an 8-hour hackathon organized by IEEE IEM COMSOC, APS & WIE where reality bends to your code. On 3rd October 2026, a thousand brilliant minds converge at IEM Gurukul Campus to question conventions, break every boundary, and build the impossible before the clock runs out. One day. Eight hours. Infinite timelines. Dare to be the exception.";
 
 const facts = [
   { icon: CalendarDays, label: "03 October 2026", tilt: "-rotate-2" },
   { icon: Clock, label: "8 Hours Straight", tilt: "rotate-1" },
-  { icon: MapPin, label: "IEM Saltlake", tilt: "-rotate-1" },
+  { icon: MapPin, label: "IEM Gurukul Campus", tilt: "-rotate-1" },
 ];
 
 export function About() {

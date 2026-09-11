@@ -37,12 +37,17 @@ export function Register() {
           Enter the Paradox
         </h2>
         <p className="mx-auto mt-6 max-w-xl text-base text-foreground/85 sm:text-lg">
-          1000+ hackers. 8 hours. One reality to rewrite. Registrations close 15th September, 2026
+          1000+ hackers. 8 hours. One reality to rewrite. Registrations close 28th September, 2026
           — secure your seat in the sanctum.
+        </p>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-primary/80 sm:text-base">
+          Every registered team gets a reg kit and swag on arrival.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-5">
           <a
-            href="mailto:paradox@iem.edu.in?subject=PARADOX%20Registration"
+            href="https://unstop.com/hackathons/paradox-hackathon-institute-of-engineering-management-kolkata-1747830?lb=m27rsItw&utm_medium=Share&utm_source=online_coding_challenge&utm_campaign=C12debra1531"
+            target="_blank"
+            rel="noopener noreferrer"
             className="graffiti-btn group inline-flex items-center gap-3 border-2 border-white/80 bg-[image:var(--gradient-mystic)] px-8 py-4 text-sm font-bold tracking-[0.2em] text-primary-foreground uppercase shadow-[var(--shadow-rune)]"
           >
             Register Now
@@ -54,7 +59,38 @@ export function Register() {
           >
             Read the Guide
           </a>
+          <span
+            aria-disabled="true"
+            className="graffiti-btn inline-flex cursor-not-allowed items-center gap-3 border-2 border-primary/30 px-8 py-4 text-sm font-bold tracking-[0.2em] text-muted-foreground uppercase opacity-70"
+          >
+            Brochure — Coming Soon
+          </span>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function EventPartners() {
+  return (
+    <section
+      id="partners"
+      className="relative mx-auto max-w-5xl px-5 py-16 text-center"
+    >
+      <p className="text-xs tracking-[0.35em] text-primary uppercase [font-family:var(--font-display)]">
+        Event Partners
+      </p>
+      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div
+            key={i}
+            className="flex min-h-24 items-center justify-center rounded-xl border border-dashed border-primary/30 bg-background/40 px-4 py-8"
+          >
+            <p className="text-sm tracking-[0.2em] text-muted-foreground uppercase">
+              Coming soon
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -78,10 +114,14 @@ export function SiteFooter() {
 
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 pt-24 pb-14 sm:grid-cols-3">
         <div>
-          <p className="font-graffiti flame-text -rotate-1 text-3xl font-normal">PARADOX</p>
+          <img
+            src="/WhatsApp_Image_2026-09-05_at_17.48.35-removebg-preview.png"
+            alt="Paradox Logo"
+            className="h-20 w-auto"
+          />
           <p className="font-tag mt-2 text-sm text-primary/80">One reality was never enough.</p>
           <p className="mt-3 text-sm text-muted-foreground [font-family:var(--font-display)]">
-            A hackathon beyond logic, presented by IEEE IEM–UEM Student Branch, ComSoc, AP-S and
+            A hackathon beyond logic, presented by IEEE IEM Student Branch, ComSoc, AP-S and
             WIE.
           </p>
         </div>
@@ -106,8 +146,17 @@ export function SiteFooter() {
         <div>
           <p className="text-xs tracking-[0.35em] text-primary uppercase [font-family:var(--font-display)]">Reach the Sanctum</p>
           <p className="mt-4 text-sm text-muted-foreground [font-family:var(--font-display)]">
-            Gurukul Building, IEM Saltlake, Kolkata
+            IEM Gurukul Building, Saltlake, Kolkata
           </p>
+          <div className="mt-3 overflow-hidden rounded-lg border border-primary/20">
+            <iframe
+              title="IEM Gurukul Building location"
+              src="https://www.google.com/maps?q=IEM+Gurukul+Building+Saltlake+Kolkata&output=embed"
+              className="h-40 w-full border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
           <div className="mt-4 flex gap-4 text-muted-foreground">
             <a href="mailto:paradox@iem.edu.in" aria-label="Email" className="hover:text-primary">
               <Mail className="h-5 w-5" />
@@ -125,7 +174,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="relative border-t border-border py-5 text-center text-xs tracking-[0.2em] text-muted-foreground uppercase [font-family:var(--font-sans)]">
-        © 2026 PARADOX · IEEE Student Branch · Terms &amp; Support · Privacy Policy
+        © 2026 PARADOX · IEM IEEE Student Branch · Terms &amp; Support · Privacy Policy
       </div>
     </footer>
   );

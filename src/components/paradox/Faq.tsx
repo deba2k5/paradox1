@@ -11,11 +11,11 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 const faqs = [
   {
     q: "Who can participate in PARADOX?",
-    a: "Any undergraduate or postgraduate student with a valid college ID can join. Beginners are welcome — mentors are around the clock to help you cast your first spell.",
+    a: "Any undergraduate student with a valid college ID can join. Beginners are welcome — mentors are around the clock to help you cast your first spell.",
   },
   {
     q: "What is the team size?",
-    a: "Teams of 2 to 4 members. Cross-college and cross-department teams are allowed and encouraged.",
+    a: "Teams of 3 to 4 members. Cross-college and cross-department teams are allowed and encouraged.",
   },
   {
     q: "Is there a registration fee?",
@@ -23,15 +23,15 @@ const faqs = [
   },
   {
     q: "Do I need to come with an idea?",
-    a: "Not at all. Problem statements and tracks are revealed at the opening ceremony, though you may build on a pre-planned idea as long as no code is written before the event.",
+    a: "Yes. The problem statements and tracks are revealed in the brochure, and you have to build your idea within those tracks, as long as no code is written before the event.",
   },
   {
     q: "What should I bring?",
-    a: "Your laptop, chargers, extension cords, college ID and anything else your build needs. Sleeping bags are welcome — the sanctum stays open all night.",
+    a: "Your laptop, chargers, extension cords, college ID and anything else your build needs.",
   },
   {
     q: "How are projects judged?",
-    a: "Innovation, technical depth, real-world impact, design and the quality of your final demo. Round 1 is table judging; the top 10 pitch on the main stage.",
+    a: "Innovation, technical depth, real-world impact, design and the quality of your final demo. Round 1 is table judging; Round 2 is the offline hackathon where the top teams build and pitch live.",
   },
 ];
 

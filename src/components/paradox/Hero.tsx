@@ -9,14 +9,11 @@ const VIDEO_DESKTOP = "/loop-desktop.mp4";
 /** duration of the crossfade in seconds */
 const CROSSFADE_DURATION = 1.2;
 
-export function Hero() {
-  const flashRef = useRef<HTMLDivElement>(null);
-  const videoWrapRef = useRef<HTMLDivElement>(null);
-  const [travelling, setTravelling] = useState(false);
-
-  const vidA = useRef<HTMLVideoElement>(null);
-  const vidB = useRef<HTMLVideoElement>(null);
-
+/** Wires up an infinite A/B crossfade loop between two video refs. */
+function useCrossfadeLoop(
+  vidA: React.RefObject<HTMLVideoElement | null>,
+  vidB: React.RefObject<HTMLVideoElement | null>,
+) {
   useEffect(() => {
     const a = vidA.current;
     const b = vidB.current;
@@ -73,7 +70,25 @@ export function Hero() {
       a.removeEventListener("ended", onEndedA);
       b.removeEventListener("ended", onEndedB);
     };
-  }, []);
+  }, [vidA, vidB]);
+}
+
+export function Hero() {
+  const flashRef = useRef<HTMLDivElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const [travelling, setTravelling] = useState(false);
+
+  // Two independent video pairs, switched purely by CSS breakpoint (like the
+  // rest of the site). This is SSR-safe (server and client always agree on
+  // which src goes where) and reacts to resize/orientation change natively —
+  // no JS media-query state, no hydration-mismatch races.
+  const vidDesktopA = useRef<HTMLVideoElement>(null);
+  const vidDesktopB = useRef<HTMLVideoElement>(null);
+  const vidMobileA = useRef<HTMLVideoElement>(null);
+  const vidMobileB = useRef<HTMLVideoElement>(null);
+
+  useCrossfadeLoop(vidDesktopA, vidDesktopB);
+  useCrossfadeLoop(vidMobileA, vidMobileB);
 
   const enterMultiverse = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -110,29 +125,45 @@ export function Hero() {
 
   return (
     <section id="home" className="relative flex min-h-screen flex-col overflow-hidden pt-28">
-      {/* Dual-video wrapper: crossfade between vidA and vidB for seamless looping */}
+      {/* Dual-video wrapper: crossfade between the A/B pair for seamless looping.
+          Desktop and mobile pairs are both in the DOM; CSS breakpoints decide
+          which one is visible, so the right file is always shown at any
+          viewport size — including after a resize. */}
       <div ref={videoWrapRef} className="absolute inset-0 overflow-hidden">
         <video
-          ref={vidA}
+          ref={vidDesktopA}
+          src={VIDEO_DESKTOP}
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-contain object-top sm:object-contain sm:object-top"
-        >
-          <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
-          <source src={VIDEO_MOBILE} type="video/mp4" />
-        </video>
+          className="absolute inset-0 hidden h-full w-full object-contain object-top sm:block"
+        />
         <video
-          ref={vidB}
+          ref={vidDesktopB}
+          src={VIDEO_DESKTOP}
           muted
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-contain object-top sm:object-contain sm:object-top"
+          className="absolute inset-0 hidden h-full w-full object-contain object-top sm:block"
           style={{ opacity: 0 }}
-        >
-          <source src={VIDEO_DESKTOP} type="video/mp4" media="(min-width: 640px)" />
-          <source src={VIDEO_MOBILE} type="video/mp4" />
-        </video>
+        />
+        <video
+          ref={vidMobileA}
+          src={VIDEO_MOBILE}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 block h-full w-full object-contain object-top sm:hidden"
+        />
+        <video
+          ref={vidMobileB}
+          src={VIDEO_MOBILE}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 block h-full w-full object-contain object-top sm:hidden"
+          style={{ opacity: 0 }}
+        />
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,color-mix(in_oklab,var(--background)_55%,transparent)_0%,transparent_70%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,var(--background)_100%)]" />
@@ -171,7 +202,9 @@ export function Hero() {
         {/* Buttons: stacked vertically on mobile (positioned above bottom), row on desktop */}
         <div className="absolute top-[68%] left-0 right-0 flex flex-col items-center gap-4 sm:relative sm:top-auto sm:left-auto sm:right-auto sm:mt-9 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-5">
           <a
-            href="#register"
+            href="https://unstop.com/hackathons/paradox-hackathon-institute-of-engineering-management-kolkata-1747830?lb=m27rsItw&utm_medium=Share&utm_source=online_coding_challenge&utm_campaign=C12debra1531"
+            target="_blank"
+            rel="noopener noreferrer"
             className="graffiti-btn group inline-flex items-center gap-3 border-2 border-white/80 bg-[image:var(--gradient-mystic)] px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-primary-foreground uppercase shadow-[var(--shadow-rune)]"
           >
             Register Now

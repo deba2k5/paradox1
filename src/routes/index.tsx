@@ -7,7 +7,7 @@ import { Prizes } from "@/components/paradox/Prizes";
 import { MysticScrollStage } from "@/components/paradox/MysticScrollStage";
 import { Schedule } from "@/components/paradox/Schedule";
 import { Faq } from "@/components/paradox/Faq";
-import { Register, SiteFooter } from "@/components/paradox/Register";
+import { Register, EventPartners, SiteFooter } from "@/components/paradox/Register";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,6 +44,7 @@ function Index() {
         <Prizes />
         <Schedule />
         <Faq />
+        <EventPartners />
         <Register />
       </main>
       <SiteFooter />

@@ -148,7 +148,9 @@ export function SiteNav() {
 					</ul>
 
 					<a
-						href="#register"
+						href="https://unstop.com/hackathons/paradox-hackathon-institute-of-engineering-management-kolkata-1747830?lb=m27rsItw&utm_medium=Share&utm_source=online_coding_challenge&utm_campaign=C12debra1531"
+						target="_blank"
+						rel="noopener noreferrer"
 						className="graffiti-btn hidden rounded-lg border-0 bg-[image:var(--gradient-mystic)] px-5 py-2.5 text-sm font-bold tracking-widest text-primary-foreground uppercase shadow-[var(--shadow-rune)] transform transition-transform hover:scale-105 md:inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-family:var(--font-sans)]"
 					>
 						Register
@@ -193,7 +195,9 @@ export function SiteNav() {
 							))}
 							<li>
 								<a
-									href="#register"
+									href="https://unstop.com/hackathons/paradox-hackathon-institute-of-engineering-management-kolkata-1747830?lb=m27rsItw&utm_medium=Share&utm_source=online_coding_challenge&utm_campaign=C12debra1531"
+									target="_blank"
+									rel="noopener noreferrer"
 									onClick={() => setOpen(false)}
 									className="mt-3 block rounded-md bg-[image:var(--gradient-mystic)] px-4 py-3 text-center text-sm font-bold tracking-widest text-primary-foreground uppercase focus:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-family:var(--font-sans)]"
 								>

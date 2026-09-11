@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BookOpen, Box, CalendarDays, Lightbulb } from "lucide-react";
+import { BookOpen, CalendarDays, Lightbulb } from "lucide-react";
 import { SectionTitle } from "./RuneRing";
 import { TiltCard } from "./TiltCard";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import prizeWinner from "@/assets/guide/prize-winner.jpg";
-import cardResources from "@/assets/guide/card-resources.png";
 import cardTimeline from "@/assets/guide/card-timeline.png";
 import cardTips from "@/assets/guide/card-tips.png";
 
@@ -15,21 +14,14 @@ const cards = [
     icon: BookOpen,
     title: "Rules & Guidelines",
     copy: "Know the rules of the game. Eligibility, team size, code of conduct and more.",
-    points: ["Teams of 2 – 4 sorcerers", "Original code written on-site", "Any stack, any realm"],
+    points: ["Teams of 3 – 4 sorcerers", "Original code written on-site", "Any stack, any realm"],
     image: prizeWinner,
-  },
-  {
-    icon: Box,
-    title: "Resources",
-    copy: "APIs, developer tools, datasets and platforms to power your ideas to life.",
-    points: ["Free API & cloud credits", "Starter kits & datasets", "Mentors on the floor"],
-    image: cardResources,
   },
   {
     icon: CalendarDays,
     title: "Timeline",
     copy: "Important dates, deadlines and key event milestones. Stay ahead, always.",
-    points: ["Registration closes 25 Sept", "Teams confirmed 30 Sept", "Hack day 3 Oct 2026"],
+    points: ["Registration closes 28 Sept", "Teams confirmed 30 Sept", "Hack day 3 Oct 2026"],
     image: cardTimeline,
   },
   {

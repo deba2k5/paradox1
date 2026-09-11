@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: "How are projects judged?",
-    a: "Innovation, technical depth, real-world impact, design and the quality of your final demo. Round 1 is table judging; Round 2 is the offline hackathon where the top teams build and pitch live.",
+    a: "Innovation, technical depth, real-world impact, design and the quality of your final demo. Round 1 is table judging; Round 2 is the offline hackathon where the top teams build and pitch live. The Top 6 Finalist Idea Pitching (3min Pitch + 1min Q&A) decides the winners.",
   },
 ];
 

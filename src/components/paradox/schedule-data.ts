@@ -5,6 +5,7 @@ import {
   Users,
   UtensilsCrossed,
   Award,
+  Mic,
   Trophy,
   type LucideIcon,
 } from "lucide-react";
@@ -63,7 +64,7 @@ export const scheduleItems: ScheduleItem[] = [
   },
   {
     index: "06",
-    time: "5:00 – 6:00 PM",
+    time: "5:00 – 5:30 PM",
     minutes: 540,
     title: "Final Judgement",
     copy: "Present your build live to the panel.",
@@ -71,6 +72,14 @@ export const scheduleItems: ScheduleItem[] = [
   },
   {
     index: "07",
+    time: "5:30 – 6:00 PM",
+    minutes: 570,
+    title: "Top 6 Finalist Idea Pitching",
+    copy: "3-minute pitch + 1-minute Q&A from each of the top 6 shortlisted teams.",
+    icon: Mic,
+  },
+  {
+    index: "08",
     time: "6:00 – 7:00 PM",
     minutes: 600,
     title: "Winners & Prizes",
